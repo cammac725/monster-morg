@@ -1,0 +1,3 @@
+GameManager
+    Spawner
+        ChestModel
