@@ -35,12 +35,15 @@ class GameScene extends Phaser.Scene {
   createGroups() {
     // create a chest group
     this.chests = this.physics.add.group();
+   
+    // create a monster group
+    this.monsters = this.physics.add.group();
   }
 
   spawnChest(chestObject) {
     let chest = this.chests.getFirstDead();
     if (!chest) {
-      const chest = new Chest(
+      chest = new Chest(
         this,
         chestObject.x * 2,
         chestObject.y * 2,
@@ -59,9 +62,29 @@ class GameScene extends Phaser.Scene {
     }
   }
 
-  spawnMonster(monster) {
-    // TODO: needs to be implemented
-    console.log(monster)
+  spawnMonster(monsterObject) {
+    let monster = this.monsters.getFirstDead();
+    if (!monster) {
+      monster = new Monster(
+        this,
+        monsterObject.x * 2,
+        monsterObject.y * 2,
+        'monsters',
+        monsterObject.frame,
+        monsterObject.id,
+        monsterObject.health,
+        monsterObject.maxHealth,
+      );
+      // add monster to monsters group
+      this.monsters.add(monster);
+    } else {
+      monster.id = monsterObject.id;
+      monster.health = monsterObject.health;
+      monster.maxHealth = monsterObject.maxHealth;
+      monster.setTexture('monsters', monsterObject.frame);
+      monster.setPosition(monsterObject.x * 2, monsterObject.y * 2);
+      monster.makeActive();
+    }
   }
 
   // createWalls() {
