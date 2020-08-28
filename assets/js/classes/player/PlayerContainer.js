@@ -11,7 +11,7 @@ class PlayerContainer extends Phaser.GameObjects.Container {
     this.scene = scene; // the scene this contianer will be added to
     this.velocity = 160; // the velocity when moving the player
     this.currentDirection = Direction.RIGHT;
-    this.palyerAttacking = false;
+    this.playerAttacking = false;
     this.flipX = true;
     this.swordHit = false;
 
@@ -45,14 +45,34 @@ class PlayerContainer extends Phaser.GameObjects.Container {
 
     if (cursors.left.isDown) {
       this.body.setVelocityX(-this.velocity);
+      this.currentDirection = Direction.LEFT;
+      this.weapon.setPosition(-40, 0);
     } else if (cursors.right.isDown) {
       this.body.setVelocityX(this.velocity);
+      this.currentDirection = Direction.RIGHT;
+      this.weapon.setPosition(40, 0);
     }
 
     if (cursors.up.isDown) {
       this.body.setVelocityY(-this.velocity);
+      this.currentDirection = Direction.UP;
+      this.weapon.setPosition(0, -40);
     } else if (cursors.down.isDown) {
       this.body.setVelocityY(this.velocity);
+      this.currentDirection = Direction.DOWN;
+      this.weapon.setPosition(0, 40);
+    }
+
+    if (this.playerAttacking) {
+
+    } else {
+      if (this.currentDirection === Direction.DOWN) {
+        this.weapon.setAngle(-270);
+      } else if (this.currentDirection === Direction.UP) {
+        this.weapon.setAngle(-90);
+      } else {
+        this.weapon.setAngle(0);
+      }
     }
   }
 }
