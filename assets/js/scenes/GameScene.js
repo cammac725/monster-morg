@@ -117,9 +117,9 @@ class GameScene extends Phaser.Scene {
       this,
     );
 
-    // check for overlaps between player and monster game objects
+    // check for overlaps between player's weapon and monster game objects
     this.physics.add.overlap(
-      this.player,
+      this.player.weapon,
       this.monsters,
       this.enemyOverlap,
       null,
@@ -128,8 +128,10 @@ class GameScene extends Phaser.Scene {
   }
 
   enemyOverlap(player, enemy) {
-    enemy.makeInactive();
-    this.events.emit('destroyEnemy', enemy.id)
+    if (this.player.playerAttacking && !this.player.swordHit) {
+      this.player.swordHit = true;
+      this.events.emit('monsterAttacked', enemy.id)
+    }
   }
 
   collectChest(player, chest) {
@@ -162,6 +164,14 @@ class GameScene extends Phaser.Scene {
 
     this.events.on('monsterSpawned', (monster) => {
       this.spawnMonster(monster);
+    });
+    
+    this.events.on('monsterRemoved', (monsterId) => {
+      this.monsters.getChildren().forEach(monster => {
+        if (monster.id === monsterId) {
+          monster.makeInactive();
+        }
+      });
     });
 
     this.gameManager = new GameManager(this, this.map.map.objects);
