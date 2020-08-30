@@ -5,7 +5,6 @@ class GameScene extends Phaser.Scene {
 
   init() {
     this.scene.launch('Ui');
-    this.score = 0;
   }
 
   create() {
@@ -28,13 +27,17 @@ class GameScene extends Phaser.Scene {
     );
   }
 
-  createPlayer(location) {
+  createPlayer(playerObject) {
     this.player = new PlayerContainer(
       this,
-      location[0] * 2,
-      location[1] * 2,
+      playerObject.x * 2,
+      playerObject.y * 2,
       'characters',
-      0);
+      0,
+      playerObject.health,
+      playerObject.maxHealth,
+      playerObject.id,
+    );
   }
 
   createGroups() {
@@ -137,14 +140,8 @@ class GameScene extends Phaser.Scene {
   collectChest(player, chest) {
     // play gold pickup sound
     this.goldPickupAudio.play();
-    // update our score
-    this.score += chest.coins;
-    // update score in the ui
-    this.events.emit('updateScore', this.score)
-    // make chest game object inactive
-    chest.makeInactive();
 
-    this.events.emit('pickupChest', chest.id)
+    this.events.emit('pickupChest', chest.id, player.id)
   }
 
   createMap() {
@@ -153,8 +150,8 @@ class GameScene extends Phaser.Scene {
   }
 
   createGameManager() {
-    this.events.on('spawnPlayer', (location) => {
-      this.createPlayer(location);
+    this.events.on('spawnPlayer', (playerObject) => {
+      this.createPlayer(playerObject);
       this.addCollisions();
     });
 
@@ -164,6 +161,14 @@ class GameScene extends Phaser.Scene {
 
     this.events.on('monsterSpawned', (monster) => {
       this.spawnMonster(monster);
+    });
+
+    this.events.on('chestRemoved', (chestId) => {
+      this.chests.getChildren().forEach(chest => {
+        if (chest.id === chestId) {
+          chest.makeInactive();
+        }
+      });
     });
     
     this.events.on('monsterRemoved', (monsterId) => {

@@ -60,10 +60,18 @@ class GameManager {
   }
 
   setupEventListeners() {
-    this.scene.events.on('pickupChest', (chestId) => {
+    this.scene.events.on('pickupChest', (chestId, playerId) => {
       // update the spawner
       if (this.chests[chestId]) {
+        const { gold } = this.chests[chestId];
+
+        // updating the player's gold
+        this.players[playerId].updateGold(gold);
+        this.scene.events.emit('updateScore', this.players[playerId].gold);
+
+        // removing the chest
         this.spawners[this.chests[chestId].spawnerId].removeObject(chestId);
+        this.scene.events.emit('chestRemoved', chestId);
       }
     });
     
@@ -122,9 +130,9 @@ class GameManager {
   }
 
   spawnPlayer() {
-    const location = this.playerLocations[Math.floor(Math.random()
-      * this.playerLocations.length)];
-    this.scene.events.emit('spawnPlayer', location);
+    const player = new PlayerModel(this.playerLocations);
+    this.players[player.id] = player;
+    this.scene.events.emit('spawnPlayer', player);
   }
 
   addChest(chestId, chest) {

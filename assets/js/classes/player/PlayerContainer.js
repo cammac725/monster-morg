@@ -6,7 +6,7 @@ const Direction = {
 }
 
 class PlayerContainer extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, key, frame) {
+  constructor(scene, x, y, key, frame, health, maxHealth, id) {
     super(scene, x, y);
     this.scene = scene; // the scene this contianer will be added to
     this.velocity = 160; // the velocity when moving the player
@@ -14,6 +14,9 @@ class PlayerContainer extends Phaser.GameObjects.Container {
     this.playerAttacking = false;
     this.flipX = true;
     this.swordHit = false;
+    this.health = health;
+    this.maxHealth = maxHealth;
+    this.id = id;
 
     // set a size on the container
     this.setSize(64, 64);
