@@ -39,6 +39,10 @@ class BootScene extends Phaser.Scene {
 
   loadAudio() {
     this.load.audio('goldSound', ['assets/audio/Pickup.wav']);
+    this.load.audio('enemyDeath', ['assets/audio/EnemyDeath.wav']);
+    this.load.audio('playerAttack', ['assets/audio/PlayerAttack.wav']);
+    this.load.audio('playerDamage', ['assets/audio/PlayerDamage.wav']);
+    this.load.audio('playerDeath', ['assets/audio/PlayerDeath.wav']);
   }
 
   loadTilemap() {
@@ -47,6 +51,6 @@ class BootScene extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start('Game');
+    this.scene.start('Title');
   }
 }

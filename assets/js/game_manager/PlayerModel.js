@@ -17,7 +17,9 @@ class PlayerModel {
 
   updateHealth(health) {
     this.health += health;
-    console.log(this.health)
+    if (this.health > 10) {
+      this.health = 10;
+    }    
   }
 
   respawn() {
