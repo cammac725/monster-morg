@@ -190,6 +190,10 @@ class GameScene extends Phaser.Scene {
     this.events.on('updatePlayerHealth', (playerId, health) => {
       this.player.updateHealth(health);
     });
+    
+    this.events.on('respawnPlayer', (playerObject) => {
+      this.player.respawn(playerObject);
+    });
 
     this.gameManager = new GameManager(this, this.map.map.objects);
     this.gameManager.setup();
