@@ -49,7 +49,7 @@ class GameScene extends Phaser.Scene {
       playerObject.x * 2,
       playerObject.y * 2,
       'characters',
-      0,
+      9,
       playerObject.health,
       playerObject.maxHealth,
       playerObject.id,
@@ -60,12 +60,19 @@ class GameScene extends Phaser.Scene {
   createGroups() {
     // create a chest group
     this.chests = this.physics.add.group();
+
+    // create a potions group
+    this.potions = this.physics.add.group();
    
     // create a monster group
     this.monsters = this.physics.add.group();
 
     // update the group automatically
     this.monsters.runChildUpdate = true;
+  }
+
+  spawnPotion(potionObject) {
+    
   }
 
   spawnChest(chestObject) {
