@@ -72,7 +72,25 @@ class GameScene extends Phaser.Scene {
   }
 
   spawnPotion(potionObject) {
-    
+    let potion = this.potions.getFirstDead();
+    if (!potion) {
+      potion = new potion(
+        this,
+        potionObject.x * 2,
+        potionObject.y * 2,
+        'items',
+        0,
+        potionObject.health,
+        potionObject.id,
+      );
+      // add potion to potions group
+      this.potions.add(potion);
+    } else {
+      potion.health = potionObject.health;
+      potion.id = potionObject.id;
+      potion.setPosition(potionObject.x * 2, potionObject.y * 2);
+      potion.makeActive();
+    }
   }
 
   spawnChest(chestObject) {
