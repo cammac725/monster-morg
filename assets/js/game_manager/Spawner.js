@@ -30,7 +30,14 @@ class Spawner {
       this.spawnChest();
     } else if (this.objectType === SpawnerType.MONSTER) {
       this.spawnMonster();
+    } else if (this.objectType === SpawnerType.POTION) {
+      this.spawnPotion();
     }
+  }
+
+  //TODO
+  spawnPotion() {
+
   }
 
   spawnChest() {

@@ -165,6 +165,15 @@ class GameScene extends Phaser.Scene {
       this,
     );
 
+    // check for overlaps between player and potion game objects
+    this.physics.add.overlap(
+      this.player,
+      this.potions,
+      this.collectPotion,
+      null,
+      this,
+    )
+
     // check for overlaps between player's weapon and monster game objects
     this.physics.add.overlap(
       this.player.weapon,
@@ -185,8 +194,13 @@ class GameScene extends Phaser.Scene {
   collectChest(player, chest) {
     // play gold pickup sound
     this.goldPickupAudio.play();
-
     this.events.emit('pickupChest', chest.id, player.id)
+  }
+
+  collectPotion(player, potion) {
+    // play potion pickup sound
+    this.goldPickupAudio.play();
+    this.events.emit('pickupPotion', potion.id, player.id)
   }
 
   createMap() {
@@ -204,6 +218,10 @@ class GameScene extends Phaser.Scene {
       this.spawnChest(chest);
     });
 
+    this.events.on('potionSpawned', (potion) => {
+      this.spawnPotion(potion);
+    })
+
     this.events.on('monsterSpawned', (monster) => {
       this.spawnMonster(monster);
     });
@@ -212,6 +230,14 @@ class GameScene extends Phaser.Scene {
       this.chests.getChildren().forEach(chest => {
         if (chest.id === chestId) {
           chest.makeInactive();
+        }
+      });
+    });
+
+    this.events.on('potionRemoved', (potionId) => {
+      this.potions.getChildren().forEach(potion => {
+        if (potion.id === potionId) {
+          potion.makeInactive();
         }
       });
     });

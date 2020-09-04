@@ -5,6 +5,7 @@ class GameManager {
 
     this.spawners = {};
     this.chests = {};
+    this.potions = {};
     this.monsters = {};
     this.players = {};
 
@@ -74,6 +75,21 @@ class GameManager {
         this.scene.events.emit('chestRemoved', chestId);
       }
     });
+
+    this.scene.events.on('pickupPotion', (potionId, playerId) => {
+      // update the spawner
+      if (this.potions[potionId]) {
+        const { health } = this.potions[potionId];
+
+        // updating the player's health
+        this.players[playerId].updateHealth(health);
+        this.scene.events.emit('updateHealth', this.players[playerId].health);
+
+        // removing the potion
+        this.spawners[this.potions[potionId].spawnerId].removeObject(potionId);
+        this.scene.events.emit('potionRemoved', potionId);
+      }
+    })
     
     this.scene.events.on('monsterAttacked', (monsterId, playerId) => {
       // update the spawner
@@ -141,6 +157,20 @@ class GameManager {
       );
       this.spawners[spawner.id] = spawner;
     });
+
+    // create potion spawners
+    Object.keys(this.potionLocations).forEach(key => {
+      config.id = `potion-${key}`;
+      config.spawnerType = SpawnerType.POTION;
+
+      spawner = new Spawner(
+        config,
+        this.potionLocations[key],
+        this.addPotion.bind(this),
+        this.deletePotion.bind(this),
+      );
+      this.spawners[spawner.id] = spawner;
+    })
 
     // create monster spawners
     Object.keys(this.monsterLocations).forEach(key => {
