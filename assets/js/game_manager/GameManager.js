@@ -123,7 +123,7 @@ class GameManager {
   setupSpawners() {
     const config = {
       spawnInterval: 3000,
-      limit: 3,
+      limit: 5,
       spawnerType: SpawnerType.CHEST,
       id: ''
     };
