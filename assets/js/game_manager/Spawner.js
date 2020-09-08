@@ -35,9 +35,13 @@ class Spawner {
     }
   }
 
-  //TODO
   spawnPotion() {
-
+    const location = this.pickRandomLocation();
+    const potion = new PotionModel(
+      location[0], location[1], randomNumber(5, 10), this.id
+    );
+    this.objectsCreated.push(potion);
+    this.addObject(potion.id, potion);
   }
 
   spawnChest() {
