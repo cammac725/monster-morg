@@ -12,6 +12,7 @@ class GameManager {
     this.playerLocations = [];
     this.chestLocations = {};
     this.monsterLocations = {};
+    this.potionLocations = {};
   }
 
   setup() {
@@ -38,6 +39,19 @@ class GameManager {
             );
           } else {
             this.chestLocations[spawner] = [
+              [obj.x + (obj.width / 2), obj.y - (obj.height / 2)]
+            ]
+          }
+        });
+      } else if(layer.name === 'potion_locations') {
+        layer.objects.forEach(obj => {
+          let spawner = getTiledProperty(obj, 'spawner');
+          if (this.potionLocations[spawner]) {
+            this.potionLocations[spawner].push(
+              [obj.x + (obj.width / 2), obj.y - (obj.height / 2)]
+            );
+          } else {
+            this.potionLocations[spawner] = [
               [obj.x + (obj.width / 2), obj.y - (obj.height / 2)]
             ]
           }
@@ -197,11 +211,19 @@ class GameManager {
   addChest(chestId, chest) {
     this.chests[chestId] = chest;
     this.scene.events.emit('chestSpawned', chest);
-
   }
 
   deleteChest(chestId) {
     delete this.chests[chestId];
+  }
+
+  addPotion(potionId, potion) {
+    this.potions[potionId] = potion;
+    this.scene.events.emit('potionSpawned', potion);
+  }
+
+  deletePotion(potionId) {
+    delete this.potions[potionId];
   }
 
   addMonster(monsterId, monster) {
